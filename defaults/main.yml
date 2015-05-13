@@ -3,3 +3,7 @@ cleanbox:
   remove: []
   empty:
     - "~/.bash_history"
+  linux_headers:
+#    - "linux-image-3.*-generic"
+    - "linux-source"
+    - "-- '-dev$'"

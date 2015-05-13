@@ -2,10 +2,7 @@
 - name: Remove Linux headers
   sudo: yes
   shell: "dpkg --list | awk '{ print $2 }' | grep '{{ item }}' | xargs apt-get -y purge"
-  with_items:
-    - "linux-image-3.*-generic"
-    - "linux-source"
-    - "-- '-dev$'"
+  with_items: cleanbox["linux_headers"]
 
 # Removes JRE, Imagemagick, PHP-GD
 #- name: Remove X11 libraries
