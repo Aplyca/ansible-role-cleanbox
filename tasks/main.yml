@@ -45,9 +45,18 @@
   sudo: yes
   command: "passwd {{ ansible_user_id }} -d"
 
+- name: Cleaning up recommended in https://github.com/hashicorp/atlas-packer-vagrant-tutorial/blob/master/scripts/cleanup.sh
+  sudo: yes
+  command: "{{ item }}"
+  with_items:
+    - "rm -rf /var/lib/dhcp/*"
+    - "rm -rf /etc/udev/rules.d/70-persistent-net.rules"
+    - "mkdir -p /etc/udev/rules.d/70-persistent-net.rules"
+    - "rm -rf /dev/.udev/"
+    - "rm -rf /lib/udev/rules.d/75-persistent-net-generator.rules"
+    - "echo 'pre-up sleep 2' >> /etc/network/interfaces"
+
 - name: Empty files
   sudo: yes
   shell: "cat /dev/null > {{ item }}"
   with_items: cleanbox["empty"]
-
-

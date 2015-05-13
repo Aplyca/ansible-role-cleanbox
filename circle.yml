@@ -3,6 +3,7 @@ general:
 
 dependencies:
   pre:
+    - sudo add-apt-repository ppa:juju/stable
     - sudo pip install paramiko PyYAML jinja2 httplib2
     - sudo pip install ansible
 
