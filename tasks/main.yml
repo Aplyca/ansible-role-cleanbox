@@ -1,0 +1,56 @@
+---
+- name: Remove Linux headers
+  sudo: yes
+  shell: "dpkg --list | awk '{ print $2 }' | grep '{{ item }}' | xargs apt-get -y purge"
+  with_items:
+    - "linux-image-3.*-generic"
+    - "linux-source"
+    - "-- '-dev$'"
+
+# Removes JRE, Imagemagick, PHP-GD
+#- name: Remove X11 libraries
+#  sudo: yes
+#  shell: "apt-get -y purge libx11-data libxcb1 libx11-6 libxext6"
+
+- name: Remove unused libraries
+  sudo: yes
+  shell: "apt-get -y purge xauth libxmuu1 ppp pppconfig pppoeconf popularity-contest puppet chef juju-core"
+
+- name: apt autoremove
+  sudo: yes
+  shell: "apt-get -y autoremove"
+
+- name: apt clean
+  sudo: yes
+  shell: "apt-get -y clean"
+
+- name: Remove VB Guest Additions
+  sudo: yes
+  shell: "rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?"
+
+- name: Remove chef
+  sudo: yes
+  shell: "rm -f /tmp/chef*deb"
+
+# Running out of space
+#- name: Convert and delete files
+#  sudo: yes
+#  shell: "dd if=/dev/zero of=/EMPTY bs=1M && sudo rm -f /EMPTY"
+
+- name: Remove files and directories
+  sudo: yes
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items: cleanbox["remove"]
+
+- name: Remove password for vagrant user
+  sudo: yes
+  command: "passwd {{ ansible_user_id }} -d"
+
+- name: Empty files
+  sudo: yes
+  shell: "cat /dev/null > {{ item }}"
+  with_items: cleanbox["empty"]
+
+

@@ -1,0 +1,5 @@
+---
+cleanbox:
+  remove: []
+  empty:
+    - "~/.bash_history"
