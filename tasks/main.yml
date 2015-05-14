@@ -4,11 +4,6 @@
   shell: "dpkg --list | awk '{ print $2 }' | grep '{{ item }}' | xargs apt-get -y purge"
   with_items: cleanbox["linux_headers"]
 
-# Removes JRE, Imagemagick, PHP-GD
-#- name: Remove X11 libraries
-#  sudo: yes
-#  shell: "apt-get -y purge libx11-data libxcb1 libx11-6 libxext6"
-
 - name: Remove unused libraries
   sudo: yes
   apt:
@@ -26,19 +21,6 @@
   sudo: yes
   shell: "apt-get -y clean"
 
-- name: Remove VB Guest Additions
-  sudo: yes
-  shell: "rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?"
-
-- name: Remove chef
-  sudo: yes
-  shell: "rm -f /tmp/chef*deb"
-
-# Running out of space
-#- name: Convert and delete files
-#  sudo: yes
-#  shell: "dd if=/dev/zero of=/EMPTY bs=1M && sudo rm -f /EMPTY"
-
 - name: Remove files and directories
   sudo: yes
   file:
@@ -50,20 +32,13 @@
   sudo: yes
   command: "passwd {{ ansible_user_id }} -d"
 
-- name: Cleaning up recommended in https://github.com/hashicorp/atlas-packer-vagrant-tutorial
+- name: Cleaning up
   sudo: yes
   shell: "{{ item }}"
   with_items:
-    - "rm -rf /var/lib/dhcp/*"
-    - "rm -rf /etc/udev/rules.d/70-persistent-net.rules"
-    - "mkdir -p /etc/udev/rules.d/70-persistent-net.rules"
-    - "rm -rf /dev/.udev/"
-    - "rm -rf /lib/udev/rules.d/75-persistent-net-generator.rules"
-    - "echo 'pre-up sleep 2' >> /etc/network/interfaces"
-    - "dd if=/dev/zero of=/EMPTY bs=1M; rm -rf /EMPTY"
-    - "sync"
-    - "sync"
-    - "sync"
+    - "rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?"
+    - "rm -f /tmp/chef*deb"
+    - "dd if=/dev/zero of=/EMPTY bs=1M && sudo rm -rf /EMPTY || sudo rm -rf /EMPTY && sync && sync && sync"
 
 - name: Empty files
   sudo: yes
