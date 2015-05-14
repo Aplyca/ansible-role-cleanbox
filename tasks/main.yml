@@ -11,7 +11,12 @@
 
 - name: Remove unused libraries
   sudo: yes
-  shell: "apt-get -y purge xauth libxmuu1 ppp pppconfig pppoeconf popularity-contest puppet chef juju-core"
+  apt:
+    name: "{{ item }}"
+    state: absent
+    purge: yes
+    force: yes
+  with_items: cleanbox["purge"]
 
 - name: apt autoremove
   sudo: yes
@@ -45,9 +50,9 @@
   sudo: yes
   command: "passwd {{ ansible_user_id }} -d"
 
-- name: Cleaning up recommended in https://github.com/hashicorp/atlas-packer-vagrant-tutorial/blob/master/scripts/cleanup.sh
+- name: Cleaning up recommended in https://github.com/hashicorp/atlas-packer-vagrant-tutorial
   sudo: yes
-  command: "{{ item }}"
+  shell: "{{ item }}"
   with_items:
     - "rm -rf /var/lib/dhcp/*"
     - "rm -rf /etc/udev/rules.d/70-persistent-net.rules"
@@ -55,6 +60,10 @@
     - "rm -rf /dev/.udev/"
     - "rm -rf /lib/udev/rules.d/75-persistent-net-generator.rules"
     - "echo 'pre-up sleep 2' >> /etc/network/interfaces"
+    - "dd if=/dev/zero of=/EMPTY bs=1M; rm -rf /EMPTY"
+    - "sync"
+    - "sync"
+    - "sync"
 
 - name: Empty files
   sudo: yes

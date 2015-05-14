@@ -1,6 +1,16 @@
 ---
 cleanbox:
   remove: []
+  purge:
+    - "xauth"
+    - "libxmuu1"
+    - "ppp"
+    - "pppconfig"
+    - "pppoeconf"
+    - "popularity-contest"
+    - "puppet"
+    - "chef"
+    - "juju-core"
   empty:
     - "~/.bash_history"
   linux_headers:
