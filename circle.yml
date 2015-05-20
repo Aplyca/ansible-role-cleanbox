@@ -12,7 +12,7 @@ machine:
 
 test:
   pre:
-    - sudo ln -s ansible-role-cleanbox ../../mauricios.Cleanbox
+    - sudo ln -s ansible-role-cleanbox ../../aplyca.Cleanbox
   override:
     - ansible-playbook $PLAYBOOK --syntax-check
     - ansible-playbook $PLAYBOOK --connection=local

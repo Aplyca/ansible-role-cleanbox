@@ -11,7 +11,7 @@ env:
 before_install:
   - uname -a
   - sudo apt-get update -qq
-  - ln -s ansible-role-cleanbox ../mauricios.Cleanbox
+  - ln -s ansible-role-cleanbox ../aplyca.Cleanbox
 
 install:
   # Install Ansible.
