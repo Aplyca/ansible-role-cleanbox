@@ -1,39 +1,39 @@
 ---
 - name: Remove Linux headers
-  sudo: yes
+  become: yes
   shell: "dpkg --list | awk '{ print $2 }' | grep '{{ item }}' | xargs apt-get -y purge"
-  with_items: cleanbox["linux_headers"]
+  with_items: "{{ cleanbox.linux_headers }}"
 
 - name: Remove unused libraries
-  sudo: yes
+  become: yes
   apt:
     name: "{{ item }}"
     state: absent
     purge: yes
     force: yes
-  with_items: cleanbox["purge"]
+  with_items: "{{ cleanbox.purge }}"
 
 - name: apt autoremove
-  sudo: yes
+  become: yes
   shell: "apt-get -y autoremove"
 
 - name: apt clean
-  sudo: yes
+  become: yes
   shell: "apt-get -y clean"
 
 - name: Remove files and directories
-  sudo: yes
+  become: yes
   file:
     path: "{{ item }}"
     state: absent
-  with_items: cleanbox["remove"]
+  with_items: "{{ cleanbox.remove }}"
 
 - name: Remove password for vagrant user
-  sudo: yes
+  become: yes
   command: "passwd {{ ansible_user_id }} -d"
 
 - name: Cleaning up
-  sudo: yes
+  become: yes
   shell: "{{ item }}"
   with_items:
     - "rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?"
@@ -41,6 +41,6 @@
     - "dd if=/dev/zero of=/EMPTY bs=1M && sudo rm -rf /EMPTY || sudo rm -rf /EMPTY && sync && sync && sync"
 
 - name: Empty files
-  sudo: yes
+  become: yes
   shell: "cat /dev/null > {{ item }}"
-  with_items: cleanbox["empty"]
+  with_items: "{{ cleanbox.empty }}"
